@@ -30,8 +30,9 @@ app:
       from: no-reply@its.hawaii.edu
   url:
     home: /
-    base: http://localhost:3000
+    base: http://localhost:8080/casdemo
     error-login: ${app.url.base}/error-login
+    frontend: http://localhost:5173/
   datasource:
     url: jdbc:h2:mem:casdemodb;INIT=create schema IF NOT EXISTS uhapp_db;DB_CLOSE_ON_EXIT=FALSE
     driver-class-name: org.h2.Driver
@@ -80,9 +81,12 @@ spring:
   config:
     activate:
       on-profile: localhost
-
   devtools:
     add-properties: false
+
+app:
+  url:
+    frontend: ${app.url.base}/
 ---
 environment: test
 spring:

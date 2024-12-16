@@ -22,6 +22,7 @@ import org.springframework.security.cas.authentication.CasAuthenticationProvider
 import org.springframework.security.cas.web.CasAuthenticationEntryPoint;
 import org.springframework.security.cas.web.CasAuthenticationFilter;
 import org.springframework.security.cas.web.authentication.ServiceAuthenticationDetailsSource;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -34,6 +35,12 @@ import org.springframework.security.web.authentication.SavedRequestAwareAuthenti
 import org.springframework.security.web.authentication.logout.LogoutFilter;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.util.Assert;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.io.IOException;
+import java.util.List;
 
 @Configuration
 @EnableWebSecurity
@@ -55,6 +62,9 @@ public class SecurityConfig {
 
     @Value("${cas.mainUrl}")
     private String casMainUrl;
+
+    @Value("${app.url.frontend}")
+    private String frontendUrl;
 
     @Autowired
     private AuthenticationConfiguration authenticationConfiguration;
@@ -182,6 +192,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests((authorizeRequests) -> {
             authorizeRequests.requestMatchers("/").permitAll();
+            authorizeRequests.requestMatchers("/logout").permitAll();
             authorizeRequests.requestMatchers("/protected").authenticated();
             authorizeRequests.requestMatchers("/api/**").authenticated();
             authorizeRequests.anyRequest().authenticated();
@@ -190,14 +201,26 @@ public class SecurityConfig {
             httpSecurity.invalidateHttpSession(true);
             httpSecurity.deleteCookies("JSESSIONID");
             httpSecurity.logoutUrl("/logout");
-            httpSecurity.logoutSuccessUrl(appUrlHome);
+            httpSecurity.logoutSuccessUrl(frontendUrl);
         });
         http.addFilter(casAuthenticationFilter());
-        http.addFilterBefore(logoutFilter(), LogoutFilter.class);
         http.addFilterBefore(singleSignOutFilter(), CasAuthenticationFilter.class);
         http.exceptionHandling((exception) -> exception.authenticationEntryPoint(casAuthenticationEntryPoint()));
 
+        http.cors(Customizer.withDefaults());
         http.csrf(AbstractHttpConfigurer::disable);
         return http.build();
+    }
+
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration corsConfiguration = new CorsConfiguration();
+        corsConfiguration.setAllowedOrigins(List.of(frontendUrl));
+        corsConfiguration.addAllowedHeader("*");
+        corsConfiguration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
+        corsConfiguration.setAllowCredentials(true);
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", corsConfiguration);
+        return source;
     }
 }
