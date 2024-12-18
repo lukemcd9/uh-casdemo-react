@@ -1,13 +1,19 @@
 import { createRoot } from 'react-dom/client'
 import 'bootstrap/dist/css/bootstrap.min.css';
-import App from './App.jsx'
 import {BrowserRouter, Route, Routes} from "react-router";
+import Menubar from "./components/Menubar.jsx";
+import {UserProvider} from "./context/UserContext.jsx";
+import App from "./App.jsx";
+import Footer from "./components/Footer.jsx";
 
 createRoot(document.getElementById('root')).render(
-    <BrowserRouter basename="/casdemo">
-        <Routes>
-            <Route path="/" element={<App/>} />
-            <Route path="/index.html" element={<App/>} />
-        </Routes>
-    </BrowserRouter>
+    <UserProvider>
+        <BrowserRouter basename={import.meta.env.BASE_URL}>
+            <Menubar/>
+            <Routes>
+                <Route path={import.meta.env.VITE_HOME} element={<App/>} />
+            </Routes>
+            <Footer/>
+        </BrowserRouter>
+    </UserProvider>
 )
