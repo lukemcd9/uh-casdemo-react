@@ -29,9 +29,10 @@ app:
     mail:
       from: no-reply@its.hawaii.edu
   url:
-    home: /
-    base: http://localhost:8080/casdemo
-    error-login: ${app.url.base}/error-login
+    host: http://localhost:8080
+    base: /casdemo
+    home: ${app.url.host}${app.url.base}
+    error-login: ${app.url.home}/error-login
     frontend: http://localhost:5173/
   datasource:
     url: jdbc:h2:mem:casdemodb;INIT=create schema IF NOT EXISTS uhapp_db;DB_CLOSE_ON_EXIT=FALSE
@@ -56,7 +57,7 @@ cas:
   mainUrl: https://cas-test.its.hawaii.edu/cas
   login:
     url: "${cas.mainUrl}/login"
-  service: "${app.url.base}/login/cas"
+  service: "${app.url.home}/login/cas"
   authenticateAllArtifacts: true
   sendRenew: true
   saml:
@@ -74,30 +75,3 @@ logging:
     org.springframework.security.web: INFO
     org.hibernate: WARN
     org.jasig.cas: WARN
-
----
-environment: localhost
-spring:
-  config:
-    activate:
-      on-profile: localhost
-  devtools:
-    add-properties: false
-
-app:
-  url:
-    frontend: ${app.url.base}/
----
-environment: test
-spring:
-  config:
-    activate:
-      on-profile: test
-app:
-  url:
-    base: https://www.test.hawaii.edu/casdemo
-
-cas:
-  mainUrl: https://authn.hawaii.edu/cas
-
-...

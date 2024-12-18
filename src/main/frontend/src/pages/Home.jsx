@@ -1,5 +1,4 @@
 import {Button, Card, CardGroup, Col, Container, Row} from "react-bootstrap";
-import {backendUrl} from "../api.js";
 
 function Home() {
     return (
@@ -7,7 +6,7 @@ function Home() {
             <Row>
                 <Col xs={12}>
                     <div className="pb-4 py-5 px-4 rounded-3 text-center my-3"
-                         style={{backgroundColor: "#f5f8ff", border: "1px solid #e5e5e5"}}>
+                         style={{ backgroundColor: "#f5f8ff", border: "1px solid #e5e5e5" }}>
                         <h1 className="display-4">
                             Identity &amp; Access Management <br/>
                             CAS Demonstration
@@ -16,7 +15,7 @@ function Home() {
                             Welcome to the University of Hawai&#699;i CAS Demonstration application. The site includes
                             source code that shows you how to use the UH CAS service.
                         </p>
-                        <Button size="lg" variant="success" href={backendUrl("login")}>UH Login Here</Button>
+                        <Button size="lg" variant="success" href="/login">UH Login Here</Button>
                     </div>
                 </Col>
             </Row>

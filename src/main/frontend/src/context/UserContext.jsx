@@ -5,16 +5,20 @@ export const UserContext = createContext(null);
 
 export const UserProvider = function({ children }) {
     const [currentUser, setUser] = useState(null);
+    const [loggedIn, setLoggedIn] = useState(false);
 
     const fetchCurrentUser = async function() {
-        instance.get("/user")
+        return instance.get("/user")
             .then(response => {
                 setUser(response.data)
-            });
+                setLoggedIn(currentUser !== null);
+            }).catch(error => {
+                setLoggedIn(false);
+        });
     }
 
     return (
-        <UserContext.Provider value={{ currentUser, fetchCurrentUser }}>
+        <UserContext.Provider value={{ currentUser, fetchCurrentUser, loggedIn }}>
             {children}
         </UserContext.Provider>
     )

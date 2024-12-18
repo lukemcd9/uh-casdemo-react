@@ -4,12 +4,13 @@ import Home from "./pages/Home.jsx";
 import User from "./pages/User.jsx";
 
 function App() {
-    const { currentUser, fetchCurrentUser } = useCurrentUser();
-    useEffect(() => {
-        fetchCurrentUser();
-    }, []);
+    // const { currentUser, fetchCurrentUser, loggedIn } = useCurrentUser();
+    //
+    // useEffect(() => {
+    //     // fetchCurrentUser().catch((err) => console.log(err));
+    // }, [loggedIn]);
 
-    return currentUser ? <User/> : <Home/>;
+    return false ? <User/> : <Home/>;
 }
 
 export default App;
