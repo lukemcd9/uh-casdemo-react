@@ -48,7 +48,7 @@ public class SecurityConfig {
 
     private static final Log logger = LogFactory.getLog(SecurityConfig.class);
 
-    @Value("${app.url.base}")
+    @Value("${app.url.home}")
     private String appUrlBase;
 
     @Value("${app.url.home}")

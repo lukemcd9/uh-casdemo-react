@@ -8,4 +8,4 @@ spring:
 
 app:
   url:
-    frontend: ${app.url.base}/
+    frontend: ${app.url.home}/

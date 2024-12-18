@@ -1,5 +1,6 @@
 import {Container, Nav, Navbar} from "react-bootstrap";
 import {useCurrentUser} from "../context/UserContext.jsx"
+import sealUrl from '../assets/seal.jpg';
 
 function Menubar() {
     const { currentUser } = useCurrentUser();
@@ -9,7 +10,7 @@ function Menubar() {
             <Container>
                 <Navbar.Brand href="#" style={{ color: "#bd9319"}}>
                     <img
-                        src="/seal.jpg"
+                        src={sealUrl}
                         width="50"
                         height="50"
                         alt="UH Seal"
