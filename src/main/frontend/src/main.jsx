@@ -5,6 +5,8 @@ import Menubar from "./components/Menubar.jsx";
 import {UserProvider} from "./context/UserContext.jsx";
 import App from "./App.jsx";
 import Footer from "./components/Footer.jsx";
+import Faq from "./pages/help/Faq.jsx";
+import Contact from "./pages/help/Contact.jsx";
 
 createRoot(document.getElementById('root')).render(
     <UserProvider>
@@ -12,6 +14,8 @@ createRoot(document.getElementById('root')).render(
             <Menubar/>
             <Routes>
                 <Route path="/" element={<App/>}/>
+                <Route path="/contact" element={<Contact/>}/>
+                <Route path="/faq" element={<Faq/>}/>
             </Routes>
             <Footer/>
         </BrowserRouter>
