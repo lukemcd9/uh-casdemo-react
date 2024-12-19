@@ -1,0 +1,11 @@
+environment: localhost
+spring:
+  config:
+    activate:
+      on-profile: localhost
+  devtools:
+    add-properties: false
+
+app:
+  url:
+    frontend: ${app.url.base}/

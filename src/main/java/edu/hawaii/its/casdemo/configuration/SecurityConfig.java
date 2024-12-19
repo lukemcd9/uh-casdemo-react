@@ -66,6 +66,10 @@ public class SecurityConfig {
     @Value("${app.url.frontend}")
     private String frontendUrl;
 
+    @Value("${app.url.frontend-host}")
+    private String frontendHost;
+
+
     @Autowired
     private AuthenticationConfiguration authenticationConfiguration;
 
@@ -79,6 +83,7 @@ public class SecurityConfig {
         logger.info("   appUrlHome: " + appUrlHome);
         logger.info("   appUrlBase: " + appUrlBase);
         logger.info("  appUrlError: " + appUrlError);
+        logger.info("  frontendUrl: " + frontendUrl);
         logger.info("   casMainUrl: " + casMainUrl);
         logger.info("  casLoginUrl: " + casLoginUrl);
         logger.info("  userBuilder: " + userBuilder);
@@ -86,6 +91,7 @@ public class SecurityConfig {
         Assert.hasLength(appUrlHome, "property 'appUrlHome' is required");
         Assert.hasLength(appUrlBase, "property 'appUrlBase' is required");
         Assert.hasLength(appUrlError, "property 'appUrlError' is required");
+        Assert.hasLength(frontendUrl, "property 'frontendUrl' is required");
         Assert.hasLength(casMainUrl, "property 'casMainUrl' is required");
         Assert.hasLength(casLoginUrl, "property 'casLoginUrl' is required");
 
@@ -167,8 +173,8 @@ public class SecurityConfig {
     public AuthenticationSuccessHandler authenticationSuccessHandler() {
         SavedRequestAwareAuthenticationSuccessHandler authenticationSuccessHandler =
                 new SavedRequestAwareAuthenticationSuccessHandler();
-        authenticationSuccessHandler.setAlwaysUseDefaultTargetUrl(false);
-        authenticationSuccessHandler.setDefaultTargetUrl(appUrlHome);
+        authenticationSuccessHandler.setAlwaysUseDefaultTargetUrl(true);
+        authenticationSuccessHandler.setDefaultTargetUrl(frontendUrl);
         return authenticationSuccessHandler;
     }
 
@@ -215,7 +221,7 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration corsConfiguration = new CorsConfiguration();
-        corsConfiguration.setAllowedOrigins(List.of(frontendUrl));
+        corsConfiguration.setAllowedOrigins(List.of(frontendHost));
         corsConfiguration.addAllowedHeader("*");
         corsConfiguration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
         corsConfiguration.setAllowCredentials(true);

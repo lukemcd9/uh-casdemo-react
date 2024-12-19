@@ -11,7 +11,7 @@ createRoot(document.getElementById('root')).render(
         <BrowserRouter basename={import.meta.env.BASE_URL}>
             <Menubar/>
             <Routes>
-                <Route path={import.meta.env.VITE_HOME} element={<App/>} />
+                <Route path="/" element={<App/>}/>
             </Routes>
             <Footer/>
         </BrowserRouter>

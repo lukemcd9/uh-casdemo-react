@@ -10,6 +10,9 @@ export const UserProvider = function({ children }) {
         instance.get("/user")
             .then(response => {
                 setUser(response.data)
+            })
+            .catch(error => {
+                console.log("Not logged in");
             });
     }
 

@@ -1,6 +1,6 @@
 import {Container, Nav, Navbar} from "react-bootstrap";
 import {useCurrentUser} from "../context/UserContext.jsx"
-import {backendUrl} from "../api.js";
+import sealUrl from "../assets/seal.jpg"
 
 function Menubar() {
     const { currentUser } = useCurrentUser();
@@ -10,7 +10,7 @@ function Menubar() {
             <Container>
                 <Navbar.Brand href="#" style={{ color: "#bd9319"}}>
                     <img
-                        src={`${import.meta.env.BASE_URL}/seal.jpg`}
+                        src={sealUrl}
                         width="50"
                         height="50"
                         alt="UH Seal"
@@ -22,7 +22,7 @@ function Menubar() {
                     <Nav className="ms-auto">
                         <Nav.Link href="#home">Home</Nav.Link>
                         <Nav.Link href="#help">Help</Nav.Link>
-                        {currentUser && <Nav.Link href={backendUrl("logout")}>Logout ({currentUser.username})</Nav.Link>}
+                        {currentUser && <Nav.Link href="/logout">Logout ({currentUser.username})</Nav.Link>}
                     </Nav>
                 </Navbar.Collapse>
             </Container>

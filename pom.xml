@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>org.springframework.boot</groupId>
@@ -29,6 +29,15 @@
 	</scm>
 	<properties>
 		<java.version>21</java.version>
+		<spring.profiles.active>dev</spring.profiles.active>
+		<node.version>v20.17.0</node.version>
+		<npm.version>10.8.2</npm.version>
+		<frontend.dir>${project.basedir}/src/main/frontend</frontend.dir>
+		<yaml-plugin.version>1.1.4</yaml-plugin.version>
+		<frontend-plugin.version>1.15.1</frontend-plugin.version>
+		<spring-security-cas.version>6.3.3</spring-security-cas.version>
+		<cas-client-core.version>4.0.4</cas-client-core.version>
+		<cas-client-support-saml.version>4.0.4</cas-client-support-saml.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -86,19 +95,19 @@
 		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-cas</artifactId>
-			<version>6.3.3</version>
+			<version>${spring-security-cas.version}</version>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/org.apereo.cas.client/cas-client-core -->
 		<dependency>
 			<groupId>org.apereo.cas.client</groupId>
 			<artifactId>cas-client-core</artifactId>
-			<version>4.0.4</version>
+			<version>${cas-client-core.version}</version>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/org.apereo.cas.client/cas-client-support-saml -->
 		<dependency>
 			<groupId>org.apereo.cas.client</groupId>
 			<artifactId>cas-client-support-saml</artifactId>
-			<version>4.0.4</version>
+			<version>${cas-client-support-saml.version}</version>
 		</dependency>
 	</dependencies>
 
@@ -110,9 +119,70 @@
 			</plugin>
 
 			<plugin>
+				<groupId>com.pro-crafting.maven</groupId>
+				<artifactId>yaml-properties-maven-plugin</artifactId>
+				<version>${yaml-plugin.version}</version>
+				<executions>
+					<execution>
+						<id>Load Properties Files</id>
+						<phase>initialize</phase>
+						<goals>
+							<goal>read-project-properties</goal>
+						</goals>
+						<configuration>
+							<files>
+								<file>${project.basedir}/src/main/resources/application.yaml</file>
+								<file>${project.basedir}/src/main/resources/application-${spring.profiles.active}.yaml</file>
+							</files>
+							<quiet>true</quiet>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>Copy .env Files To JavaScript App</id>
+						<phase>process-resources</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${frontend.dir}/</outputDirectory>
+							<resources>
+								<resource>
+									<directory>${project.basedir}/src/main/resources/env</directory>]
+									<filtering>true</filtering>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
+					<execution>
+						<id>Copy JavaScript app into SpringBoot</id>
+						<phase>process-resources</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>target/classes/static</outputDirectory>
+							<resources>
+								<resource>
+									<directory>${frontend.dir}/dist</directory>
+									<filtering>true</filtering>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
 				<groupId>com.github.eirslett</groupId>
 				<artifactId>frontend-maven-plugin</artifactId>
-				<version>1.15.1</version>
+				<version>${frontend-plugin.version}</version>
 
 				<executions>
 					<!-- installing node and npm -->
@@ -123,8 +193,8 @@
 						</goals>
 						<phase>generate-resources</phase>
 						<configuration>
-							<nodeVersion>v20.17.0</nodeVersion>
-							<npmVersion>10.8.2</npmVersion>
+							<nodeVersion>${node.version}</nodeVersion>
+							<npmVersion>${npm.version}</npmVersion>
 						</configuration>
 					</execution>
 
@@ -153,32 +223,9 @@
 					</execution>
 				</executions>
 				<configuration>
-					<nodeVersion>v20.17.0</nodeVersion>
-					<workingDirectory>src/main/frontend</workingDirectory>
+					<nodeVersion>${node.version}</nodeVersion>
+					<workingDirectory>${frontend.dir}</workingDirectory>
 				</configuration>
-			</plugin>
-
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-resources-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>Copy JavaScript app into SpringBoot</id>
-						<phase>process-resources</phase>
-						<goals>
-							<goal>copy-resources</goal>
-						</goals>
-						<configuration>
-							<outputDirectory>target/classes/static</outputDirectory>
-							<resources>
-								<resource>
-									<directory>src/main/frontend/dist</directory>
-									<filtering>true</filtering>
-								</resource>
-							</resources>
-						</configuration>
-					</execution>
-				</executions>
 			</plugin>
 		</plugins>
 	</build>

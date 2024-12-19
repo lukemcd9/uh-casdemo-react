@@ -16,7 +16,7 @@ function Home() {
                             Welcome to the University of Hawai&#699;i CAS Demonstration application. The site includes
                             source code that shows you how to use the UH CAS service.
                         </p>
-                        <Button size="lg" variant="success" href={backendUrl("login")}>UH Login Here</Button>
+                        <Button size="lg" variant="success" href="/login">UH Login Here</Button>
                     </div>
                 </Col>
             </Row>
