@@ -154,7 +154,10 @@
 							<outputDirectory>${frontend.dir}/</outputDirectory>
 							<resources>
 								<resource>
-									<directory>${project.basedir}/src/main/resources/env</directory>]
+									<directory>${project.basedir}/src/main/resources</directory>
+									<includes>
+										<include>.env</include>
+									</includes>
 									<filtering>true</filtering>
 								</resource>
 							</resources>
