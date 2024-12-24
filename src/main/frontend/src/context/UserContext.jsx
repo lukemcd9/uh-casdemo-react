@@ -7,7 +7,7 @@ export const UserProvider = function({ children }) {
     const [currentUser, setUser] = useState(null);
 
     const fetchCurrentUser = async function() {
-        instance.get("/user")
+        return instance.get("/user")
             .then(response => {
                 setUser(response.data)
             })

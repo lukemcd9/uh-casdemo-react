@@ -2,6 +2,7 @@ import {Container, Nav, Navbar, NavDropdown} from "react-bootstrap";
 import {useCurrentUser} from "../context/UserContext.jsx"
 import sealUrl from "../assets/seal.jpg"
 import {Link} from "react-router";
+import hasRole from "../service/user.js";
 
 function Menubar() {
     const { currentUser } = useCurrentUser();
@@ -26,13 +27,13 @@ function Menubar() {
                             <NavDropdown.Item  as={Link} to="/faq">FAQ</NavDropdown.Item>
                             <NavDropdown.Item  as={Link} to="/contact">Contact</NavDropdown.Item>
                         </NavDropdown>
-                        {
+                        { hasRole(currentUser, "ROLE_ADMIN") &&
                             <NavDropdown title="Admin" id="navbarAdminDropdown">
-                                <NavDropdown.Item  as={Link} to="/">Administration</NavDropdown.Item>
+                                <NavDropdown.Item  as={Link} to="/admin">Administration</NavDropdown.Item>
                                 <NavDropdown.Divider/>
                                 <NavDropdown.Item  as={Link} to="/">Application Roles</NavDropdown.Item>
                                 <NavDropdown.Item  as={Link} to="/">Campuses</NavDropdown.Item>
-                                <NavDropdown.Item  as={Link} to="/">Holidays</NavDropdown.Item>
+                                <NavDropdown.Item  as={Link} to="/holidays">Holidays</NavDropdown.Item>
                                 <NavDropdown.Divider/>
                                 <NavDropdown.Item  as={Link} to="/user">Login Attributes</NavDropdown.Item>
                             </NavDropdown>

@@ -9,9 +9,7 @@ function Login() {
         fetchCurrentUser();
     }, []);
 
-    return (
-        currentUser ? <Navigate to="/user"/> : <p>Loading...</p>
-    );
+    return currentUser ? <Navigate to="/user"/> : <p>Loading...</p>
 }
 
 export default Login;
