@@ -8,12 +8,13 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
 
-@RestController
+@Controller
 public class HomeController {
 
     private static final Log logger = LogFactory.getLog(HomeController.class);
@@ -30,7 +31,7 @@ public class HomeController {
     @GetMapping("/login")
     public void test(HttpServletResponse response) throws IOException {
         logger.info("Logged in");
-        response.sendRedirect(frontendUrl);
+        response.sendRedirect(frontendUrl + "/auth");
     }
 
     @PreAuthorize("isAuthenticated()")

@@ -1,7 +1,8 @@
 import {Button, Card, CardGroup, Col, Container, Row} from "react-bootstrap";
-import {backendUrl} from "../api.js";
+import {useCurrentUser} from "../context/UserContext.jsx";
 
 function Home() {
+    const { currentUser } = useCurrentUser();
     return (
         <Container className="h-auto">
             <Row>
@@ -16,7 +17,10 @@ function Home() {
                             Welcome to the University of Hawai&#699;i CAS Demonstration application. The site includes
                             source code that shows you how to use the UH CAS service.
                         </p>
-                        <Button size="lg" variant="success" href="/login">UH Login Here</Button>
+                        { currentUser ?
+                            <Button size="lg" variant="outline-primary" href={`${import.meta.env.VITE_HOME}/logout`}>Logout</Button>
+                            : <Button size="lg" variant="success" href={`${import.meta.env.VITE_HOME}/login`}>UH Login Here</Button>
+                        }
                     </div>
                 </Col>
             </Row>

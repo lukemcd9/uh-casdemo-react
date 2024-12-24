@@ -1,5 +1,5 @@
 import {createContext, useContext, useState} from "react";
-import {instance} from "../api.js";
+import {instance} from "../service/api.js";
 
 export const UserContext = createContext(null);
 

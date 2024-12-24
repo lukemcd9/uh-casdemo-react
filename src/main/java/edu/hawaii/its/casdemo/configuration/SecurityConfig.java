@@ -27,6 +27,7 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.AuthenticationUserDetailsService;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
@@ -173,8 +174,8 @@ public class SecurityConfig {
     public AuthenticationSuccessHandler authenticationSuccessHandler() {
         SavedRequestAwareAuthenticationSuccessHandler authenticationSuccessHandler =
                 new SavedRequestAwareAuthenticationSuccessHandler();
-        authenticationSuccessHandler.setAlwaysUseDefaultTargetUrl(true);
-        authenticationSuccessHandler.setDefaultTargetUrl(frontendUrl);
+        authenticationSuccessHandler.setAlwaysUseDefaultTargetUrl(false);
+        authenticationSuccessHandler.setDefaultTargetUrl(appUrlHome);
         return authenticationSuccessHandler;
     }
 
@@ -198,11 +199,13 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests((authorizeRequests) -> {
             authorizeRequests.requestMatchers("/").permitAll();
+            authorizeRequests.requestMatchers("/index.html").permitAll();
             authorizeRequests.requestMatchers("/logout").permitAll();
             authorizeRequests.requestMatchers("/protected").authenticated();
             authorizeRequests.requestMatchers("/api/**").authenticated();
             authorizeRequests.anyRequest().authenticated();
         });
+//        http.sessionManagement((session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
         http.logout((httpSecurity) -> {
             httpSecurity.invalidateHttpSession(true);
             httpSecurity.deleteCookies("JSESSIONID");

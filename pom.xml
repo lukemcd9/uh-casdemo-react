@@ -29,7 +29,7 @@
 	</scm>
 	<properties>
 		<java.version>21</java.version>
-		<spring.profiles.active>dev</spring.profiles.active>
+		<spring.profiles.active>localhost</spring.profiles.active>
 		<node.version>v20.17.0</node.version>
 		<npm.version>10.8.2</npm.version>
 		<frontend.dir>${project.basedir}/src/main/frontend</frontend.dir>
@@ -228,6 +228,15 @@
 				<configuration>
 					<nodeVersion>${node.version}</nodeVersion>
 					<workingDirectory>${frontend.dir}</workingDirectory>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<profiles>
+						<profile>${spring.profiles.active}</profile>
+					</profiles>
 				</configuration>
 			</plugin>
 		</plugins>

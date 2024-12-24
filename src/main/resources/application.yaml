@@ -30,10 +30,11 @@ app:
       from: no-reply@its.hawaii.edu
   url:
     home: /
-    base: http://localhost:8080/casdemo
+    host: http://localhost:8080
+    base: ${app.url.host}${server.servlet.context-path}
     error-login: ${app.url.base}/error-login
     frontend-host: http://localhost:5173
-    frontend: ${app.url.frontend-host}/casdemo
+    frontend: ${app.url.frontend-host}${server.servlet.context-path}
   datasource:
     url: jdbc:h2:mem:casdemodb;INIT=create schema IF NOT EXISTS uhapp_db;DB_CLOSE_ON_EXIT=FALSE
     driver-class-name: org.h2.Driver
@@ -71,7 +72,7 @@ logging:
     org.springframework: INFO
     org.springframework.boot.test.mock.web: WARN
     org.springframework.cache: INFO
-    org.springframework.security.web.authentication: INFO
-    org.springframework.security.web: INFO
+    org.springframework.security.web.authentication: DEBUG
+    org.springframework.security.web: DEBUG
     org.hibernate: WARN
     org.jasig.cas: WARN

@@ -4,20 +4,14 @@ import react from '@vitejs/plugin-react-swc'
 // https://vite.dev/config/
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '');
+  const base = env.VITE_HOME;
   return {
     plugins: [react()],
-    base: '/casdemo',
+    base,
     server: {
       proxy: {
-        '/api': {
-          target: `${env.VITE_BACKEND_URL_HOME}/api`
-        },
-        '/login': {
-          target: `${env.VITE_BACKEND_URL_HOME}/login`
-        },
-        '/logout': {
-          target: `${env.VITE_BACKEND_URL_HOME}/logout`
-        }
+        [`${base}/login`]: env.VITE_BACKEND_URL,
+        [`${base}/logout`]: env.VITE_BACKEND_URL,
       }
     }
   }
