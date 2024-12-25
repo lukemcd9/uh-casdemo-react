@@ -1,15 +1,21 @@
 import {Card, Container, Table, Form, Row, Col} from "react-bootstrap";
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import holidaysData from "../../assets/holidays.json";
+import {MoveDown, MoveUp} from "lucide-react";
 
 function yearRange(start, stop, step) {
     return Array.from({length: (stop - start) / step + 1}, (_, i) => start + (i * step));
 }
 
 function Holidays() {
-    const sortOptions = ["holiday", "observed", "official"];
+    const headers = [
+        { column: "description", description: "Holidays" },
+        { column: "observedDate", description: "Observed" },
+        { column: "officialDate", description: "Official" },
+    ];
     const [holidays, setHolidays] = useState([]);
     const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
+    const [sortHeader, setSortHeader] = useState({column: "observedDate", ascending: false});
     const [filter, setFilter] = useState("");
     const allYears = "(all years)";
     const years = yearRange(2028, 2006, -1).concat([allYears]);
@@ -18,11 +24,20 @@ function Holidays() {
         fetchHolidays(selectedYear);
     }, [selectedYear]);
 
-    const filterHolidays = holidays.filter((holiday) => {
-        return Object.values(holiday).some((value) =>
-            value.toString().toLowerCase().includes(filter.toLowerCase())
-        );
-    })
+    useEffect(() => {
+        if (holidays.length > 0) {
+            const holidaysCopy = [...holidays];
+
+            const sortedHolidays = holidaysCopy.sort((a, b) => {
+                if (sortHeader.column === "description") {
+                    return a.description.localeCompare(b.description);
+                }
+                return new Date(a[sortHeader.column]) - new Date(b[sortHeader.column]);
+            });
+
+            setHolidays(sortHeader.ascending ? sortedHolidays : sortedHolidays.reverse());
+        }
+    }, [sortHeader]);
 
     async function fetchHolidays(year) {
         let response = holidaysData;
@@ -56,8 +71,7 @@ function Holidays() {
                                 className="float-start"
                                 defaultValue={selectedYear}
                                 onChange={(event) => setSelectedYear(event.target.value)}>
-                                {
-                                    years.map((year, index) =>
+                                {years.map((year, index) =>
                                         <option value={year} key={index}>{year}</option>)
                                 }
                             </Form.Select>
@@ -76,19 +90,28 @@ function Holidays() {
                     <Table responsive size={"sm"} bordered hover align="left">
                         <thead>
                         <tr>
-                            <th>Holiday</th>
-                            <th>Observed</th>
-                            <th>Official</th>
+                            {headers.map((header, index) => (
+                                <th id={header.column} key={index}
+                                    className="clickable"
+                                    onClick={(event) =>
+                                        setSortHeader({ column: event.currentTarget.id, ascending: !sortHeader.ascending })}>
+                                    {header.description}
+                                    <Sorter column={header.column} sortHeader={sortHeader}/>
+                                </th>
+                            ))}
                         </tr>
                         </thead>
                         <tbody>
                             {
-                                filterHolidays.map((holiday, index) => (
-                                    <tr key={index}>
-                                        <td>{holiday.description}</td>
-                                        <td>{holiday.observedDateFull}</td>
-                                        <td>{holiday.officialDateFull}</td>
-                                    </tr>
+                                holidays.filter((holiday) =>
+                                    Object.values(holiday)
+                                        .some((value) => value.toString().toLowerCase().includes(filter.toLowerCase())))
+                                    .map((holiday, index) => (
+                                        <tr key={index}>
+                                            <td>{holiday.description}</td>
+                                            <td>{holiday.observedDateFull}</td>
+                                            <td>{holiday.officialDateFull}</td>
+                                        </tr>
                                 ))
                             }
                         </tbody>
@@ -97,6 +120,13 @@ function Holidays() {
             </Card>
         </Container>
     );
+}
+
+function Sorter({ column, sortHeader, setSortHeader }) {
+    if (column !== sortHeader.column) return null;
+    return sortHeader.ascending ?
+        <MoveUp size={16} strokeWidth={2.75}/>
+        : <MoveDown size={16} strokeWidth={2.75}/>;
 }
 
 export default Holidays;

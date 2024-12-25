@@ -115,5 +115,9 @@ td.uh-pre {
 .a-link.btn-link:focus,
 .a-link.btn-link:hover {
     color: #0275d8;
-    text-decoration: underline;
+    text-decoration: underline
+}
+
+.clickable {
+    cursor: pointer;
 }
