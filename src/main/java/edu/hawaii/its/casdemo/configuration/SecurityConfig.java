@@ -202,6 +202,7 @@ public class SecurityConfig {
             authorizeRequests.requestMatchers("/index.html").permitAll();
             authorizeRequests.requestMatchers("/logout").permitAll();
             authorizeRequests.requestMatchers("/protected").authenticated();
+            authorizeRequests.requestMatchers("/api/message/**").permitAll();
             authorizeRequests.requestMatchers("/api/**").authenticated();
             authorizeRequests.anyRequest().authenticated();
         });

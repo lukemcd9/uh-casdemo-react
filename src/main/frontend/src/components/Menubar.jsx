@@ -29,11 +29,11 @@ function Menubar() {
                         </NavDropdown>
                         { hasRole(currentUser, "ROLE_ADMIN") &&
                             <NavDropdown title="Admin" id="navbarAdminDropdown">
-                                <NavDropdown.Item  as={Link} to="/admin">Administration</NavDropdown.Item>
+                                <NavDropdown.Item  as={Link} to="/admin/">Administration</NavDropdown.Item>
                                 <NavDropdown.Divider/>
-                                <NavDropdown.Item  as={Link} to="/">Application Roles</NavDropdown.Item>
-                                <NavDropdown.Item  as={Link} to="/">Campuses</NavDropdown.Item>
-                                <NavDropdown.Item  as={Link} to="/holidays">Holidays</NavDropdown.Item>
+                                <NavDropdown.Item  as={Link} to="/admin/roles">Application Roles</NavDropdown.Item>
+                                <NavDropdown.Item  as={Link} to="/admin/campuses">Campuses</NavDropdown.Item>
+                                <NavDropdown.Item  as={Link} to="/admin/holidays">Holidays</NavDropdown.Item>
                                 <NavDropdown.Divider/>
                                 <NavDropdown.Item  as={Link} to="/user">Login Attributes</NavDropdown.Item>
                             </NavDropdown>

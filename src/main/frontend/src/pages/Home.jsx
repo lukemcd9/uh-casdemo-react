@@ -1,22 +1,34 @@
 import {Button, Card, CardGroup, Col, Container, Row} from "react-bootstrap";
 import {useCurrentUser} from "../context/UserContext.jsx";
+import {useEffect, useState} from "react";
+import {instance} from "../service/api.js";
 
 function Home() {
     const { currentUser } = useCurrentUser();
+    const [message, setMessage] = useState();
+
+    useEffect(() => {
+        const fetchMessage = async () => {
+            const response = await instance.get("/message/1");
+            setMessage(response.data);
+        }
+
+        fetchMessage();
+    }, []);
+
+
     return (
         <Container className="h-auto">
             <Row>
                 <Col xs={12}>
                     <div className="pb-4 py-5 px-4 rounded-3 text-center my-3"
                          style={{backgroundColor: "#f5f8ff", border: "1px solid #e5e5e5"}}>
-                        <h1 className="display-4">
-                            Identity &amp; Access Management <br/>
+                        <h1 className="display-4 dropshadow">
+                            Identity <span className="amp">&amp;</span> Access Management <br/>
                             CAS Demonstration
                         </h1>
-                        <p className="lead">
-                            Welcome to the University of Hawai&#699;i CAS Demonstration application. The site includes
-                            source code that shows you how to use the UH CAS service.
-                        </p>
+                        {/*Dangerously setting html is okay here since this is coming directly from our database rather than user input*/}
+                        <p className="lead" dangerouslySetInnerHTML={{ __html: message?.text }}/>
                         { currentUser ?
                             <Button size="lg" variant="outline-primary" href={`${import.meta.env.VITE_HOME}/logout`}>Logout</Button>
                             : <Button size="lg" variant="success" href={`${import.meta.env.VITE_HOME}/login`}>UH Login Here</Button>
