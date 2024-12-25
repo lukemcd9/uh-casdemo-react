@@ -1,4 +1,28 @@
+html {
+    position: relative;
+    min-height: 100%;
+    overflow-y: scroll;
+}
+
+body {
+    padding-bottom: 40px;
+}
+
 .uh-card-header {
     background-color: #f5f8ff;
     color: #bd9319;
+}
+
+.closest {
+    background-color: #f5f8ff !important;
+}
+
+.footer {
+    position: absolute;
+    padding-top: 10px;
+    bottom: 0;
+    width: 100%;
+    height: 50px;
+    font-size: 100%;
+    text-align: center;
 }

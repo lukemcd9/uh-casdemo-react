@@ -1,5 +1,6 @@
 import { createRoot } from 'react-dom/client'
 import 'bootstrap/dist/css/bootstrap.min.css';
+import './index.css';
 import {BrowserRouter, Route, Routes} from "react-router";
 import Menubar from "./components/Menubar.jsx";
 import {UserProvider} from "./context/UserContext.jsx";
@@ -21,16 +22,16 @@ createRoot(document.getElementById('root')).render(
                 <Route path="/auth" element={<Login/>}/>
                 <Route path="/contact" element={<Contact/>}/>
                 <Route path="/faq" element={<Faq/>}/>
-                <Route path="/holidays" element={<Holidays/>}/>
 
                 {/*Routes that require to be logged in*/}
                 <Route element={<ProtectedRoutes/>}>
                     <Route path="/user" element={<User/>}/>
+                    <Route path="/holidays" element={<Holidays/>}/>
                 </Route>
 
                 {/*Routes that require to be logged in and have a role of ROLE_ADMIN*/}
                 <Route element={<ProtectedRoutes role="ROLE_ADMIN"/>}>
-                    <Route path="/admin" element={<Faq/>}/>
+                    <Route path="/admin" element={<User/>}/>
                 </Route>
             </Routes>
             <Footer/>

@@ -2,7 +2,7 @@ import {Navigate, Outlet} from "react-router";
 import hasRole from "../service/user.js";
 import {useCurrentUser} from "../context/UserContext.jsx";
 function ProtectedRoutes({ role }) {
-    const { currentUser, fetchCurrentUser } = useCurrentUser();
+    const { currentUser } = useCurrentUser();
 
     // ---------------------------------------------
     // This is an example for potentially verifying on Spring side that they do have the role.
@@ -17,7 +17,7 @@ function ProtectedRoutes({ role }) {
     //     }
     // }, []);
     // ---------------------------------------------
-    if (currentUser && role && hasRole(role)) {
+    if (hasRole(currentUser, role)) {
         return <Outlet/>;
     }
     return (currentUser && !role) ? <Outlet/> : <Navigate to="/"/>;
