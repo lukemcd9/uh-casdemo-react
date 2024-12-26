@@ -1,7 +1,8 @@
 import {Card, Container, Table, Form, Row, Col} from "react-bootstrap";
 import React, {useEffect, useState} from "react";
 import holidaysData from "../../assets/holidays.json";
-import {MoveDown, MoveUp} from "lucide-react";
+import {FaArrowDownLong, FaArrowUpLong} from "react-icons/fa6";
+import Loading from "../../components/Loading.jsx";
 
 function yearRange(start, stop, step) {
     return Array.from({length: (stop - start) / step + 1}, (_, i) => start + (i * step));
@@ -13,7 +14,7 @@ function Holidays() {
         { column: "observedDate", description: "Observed" },
         { column: "officialDate", description: "Official" },
     ];
-    const [holidays, setHolidays] = useState([]);
+    const [holidays, setHolidays] = useState(null);
     const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
     const [sortHeader, setSortHeader] = useState({column: "observedDate", ascending: false});
     const [filter, setFilter] = useState("");
@@ -25,7 +26,7 @@ function Holidays() {
     }, [selectedYear]);
 
     useEffect(() => {
-        if (holidays.length > 0) {
+        if (holidays?.length > 0) {
             const holidaysCopy = [...holidays];
 
             const sortedHolidays = holidaysCopy.sort((a, b) => {
@@ -86,23 +87,24 @@ function Holidays() {
                     </Row>
                 </Card.Header>
                 <Card.Body>
-                    <Table responsive bordered hover align="left">
-                        <thead>
-                        <tr>
-                            {
-                                headers.map((header, index) => (
-                                    <th id={header.column} key={index}
-                                        className="clickable"
-                                        onClick={(event) =>
-                                            setSortHeader({ column: event.currentTarget.id, ascending: !sortHeader.ascending })}>
-                                        {header.description}
-                                        <Sorter column={header.column} sortHeader={sortHeader}/>
-                                    </th>
-                                ))
-                            }
-                        </tr>
-                        </thead>
-                        <tbody>
+                    { holidays ?
+                        <Table responsive bordered hover align="left">
+                            <thead>
+                            <tr>
+                                {
+                                    headers.map((header, index) => (
+                                        <th id={header.column} key={index}
+                                            className="clickable"
+                                            onClick={(event) =>
+                                                setSortHeader({ column: event.currentTarget.id, ascending: !sortHeader.ascending })}>
+                                            {header.description}
+                                            <Sorter column={header.column} sortHeader={sortHeader}/>
+                                        </th>
+                                    ))
+                                }
+                            </tr>
+                            </thead>
+                            <tbody>
                             {
                                 holidays.filter((holiday) =>
                                     Object.values(holiday)
@@ -113,21 +115,22 @@ function Holidays() {
                                             <td>{holiday.observedDateFull}</td>
                                             <td>{holiday.officialDateFull}</td>
                                         </tr>
-                                ))
+                                    ))
                             }
-                        </tbody>
-                    </Table>
+                            </tbody>
+                        </Table>
+                    : <Loading/>}
                 </Card.Body>
             </Card>
         </Container>
     );
 }
 
-function Sorter({ column, sortHeader, setSortHeader }) {
+function Sorter({ column, sortHeader }) {
     if (column !== sortHeader.column) return null;
     return sortHeader.ascending ?
-        <MoveUp size={16} strokeWidth={2.75}/>
-        : <MoveDown size={16} strokeWidth={2.75}/>;
+        <FaArrowUpLong/>
+        : <FaArrowDownLong/>;
 }
 
 export default Holidays;

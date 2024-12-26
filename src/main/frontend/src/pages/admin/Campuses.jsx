@@ -1,18 +1,19 @@
 import {Card, Col, Container, Form, Row, Table} from "react-bootstrap";
 import {useEffect, useState} from "react";
 import * as api from "../../service/api.js";
+import Loading from "../../components/Loading.jsx";
 
 function Campuses() {
 
     const [filter, setFilter] = useState("");
-    const [campuses, setCampuses] = useState([]);
+    const [campuses, setCampuses] = useState(null);
 
     async function fetchCampuses() {
         const response = await api.instance.get("/campuses");
         setCampuses(response.data);
     }
 
-    const filterCampuses = campuses.filter((holiday) => {
+    const filterCampuses = campuses?.filter((holiday) => {
         return Object.values(holiday).some((value) =>
             value.toString().toLowerCase().includes(filter.toLowerCase())
         );
@@ -41,15 +42,16 @@ function Campuses() {
                     </Row>
                 </Card.Header>
                 <Card.Body>
-                    <Table responsive bordered hover align="left">
-                        <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Code</th>
-                            <th>ID</th>
-                        </tr>
-                        </thead>
-                        <tbody>
+                    { campuses ?
+                        <Table responsive bordered hover align="left">
+                            <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Code</th>
+                                <th>ID</th>
+                            </tr>
+                            </thead>
+                            <tbody>
                             {
                                 filterCampuses.map((campus, index) => (
                                     <tr key={index}>
@@ -59,8 +61,9 @@ function Campuses() {
                                     </tr>
                                 ))
                             }
-                        </tbody>
-                    </Table>
+                            </tbody>
+                        </Table>
+                    : <Loading/>}
                 </Card.Body>
             </Card>
         </Container>

@@ -1,18 +1,19 @@
 import {Card, Col, Container, Form, Row, Table} from "react-bootstrap";
 import {useEffect, useState} from "react";
 import * as api from "../../service/api.js";
+import Loading from "../../components/Loading.jsx";
 
 function ApplicationRoles() {
 
     const [filter, setFilter] = useState("");
-    const [applicationRoles, setApplicationRoles] = useState([]);
+    const [applicationRoles, setApplicationRoles] = useState(null);
 
     async function fetchApplicationRoles() {
         const response = await api.instance.get("/roles");
         setApplicationRoles(response.data);
     }
 
-    const filterApplicationRoles = applicationRoles.filter((holiday) => {
+    const filterApplicationRoles = applicationRoles?.filter((holiday) => {
         return Object.values(holiday).some((value) =>
             value.toString().toLowerCase().includes(filter.toLowerCase())
         );
@@ -41,24 +42,26 @@ function ApplicationRoles() {
                     </Row>
                 </Card.Header>
                 <Card.Body>
-                    <Table responsive bordered hover align="left">
-                        <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Code</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {
-                            filterApplicationRoles.map((role, index) => (
-                                <tr key={index}>
-                                    <td>{role.description}</td>
-                                    <td>{role.id}</td>
-                                </tr>
-                            ))
-                        }
-                        </tbody>
-                    </Table>
+                    { applicationRoles ?
+                        <Table responsive bordered hover align="left">
+                            <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Code</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {
+                                filterApplicationRoles.map((role, index) => (
+                                    <tr key={index}>
+                                        <td>{role.description}</td>
+                                        <td>{role.id}</td>
+                                    </tr>
+                                ))
+                            }
+                            </tbody>
+                        </Table>
+                    : <Loading/> }
                 </Card.Body>
             </Card>
         </Container>
