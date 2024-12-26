@@ -57,7 +57,6 @@ function Holidays() {
         const idx = temp.indexOf(Math.min(...temp));
         filteredHolidays[idx].closest = true;
         setHolidays(filteredHolidays);
-        setSelectedYear(year);
     }
 
     return (
@@ -87,18 +86,20 @@ function Holidays() {
                     </Row>
                 </Card.Header>
                 <Card.Body>
-                    <Table responsive size={"sm"} bordered hover align="left">
+                    <Table responsive bordered hover align="left">
                         <thead>
                         <tr>
-                            {headers.map((header, index) => (
-                                <th id={header.column} key={index}
-                                    className="clickable"
-                                    onClick={(event) =>
-                                        setSortHeader({ column: event.currentTarget.id, ascending: !sortHeader.ascending })}>
-                                    {header.description}
-                                    <Sorter column={header.column} sortHeader={sortHeader}/>
-                                </th>
-                            ))}
+                            {
+                                headers.map((header, index) => (
+                                    <th id={header.column} key={index}
+                                        className="clickable"
+                                        onClick={(event) =>
+                                            setSortHeader({ column: event.currentTarget.id, ascending: !sortHeader.ascending })}>
+                                        {header.description}
+                                        <Sorter column={header.column} sortHeader={sortHeader}/>
+                                    </th>
+                                ))
+                            }
                         </tr>
                         </thead>
                         <tbody>

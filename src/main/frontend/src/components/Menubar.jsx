@@ -24,8 +24,8 @@ function Menubar() {
                     <Nav className="ms-auto">
                         <Nav.Link as={Link} to="/">Home</Nav.Link>
                         <NavDropdown title="Help" id="navbarHelpDropdown">
-                            <NavDropdown.Item  as={Link} to="/faq">FAQ</NavDropdown.Item>
                             <NavDropdown.Item  as={Link} to="/contact">Contact</NavDropdown.Item>
+                            <NavDropdown.Item  as={Link} to="/faq">FAQ</NavDropdown.Item>
                         </NavDropdown>
                         { hasRole(currentUser, "ROLE_ADMIN") &&
                             <NavDropdown title="Admin" id="navbarAdminDropdown">

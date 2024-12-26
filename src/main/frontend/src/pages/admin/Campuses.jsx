@@ -41,7 +41,7 @@ function Campuses() {
                     </Row>
                 </Card.Header>
                 <Card.Body>
-                    <Table responsive size={"sm"} bordered hover align="left" className="">
+                    <Table responsive bordered hover align="left">
                         <thead>
                         <tr>
                             <th>Name</th>
