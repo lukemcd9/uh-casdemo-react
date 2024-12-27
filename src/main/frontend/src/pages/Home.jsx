@@ -2,6 +2,7 @@ import {Button, Card, CardGroup, Col, Container, Row} from "react-bootstrap";
 import {useCurrentUser} from "../context/UserContext.jsx";
 import {useEffect, useState} from "react";
 import {instance} from "../service/api.js";
+import {Link} from "react-router";
 
 function Home() {
     const { currentUser } = useCurrentUser();
@@ -47,7 +48,7 @@ function Home() {
                             </Card.Text>
                         </Card.Body>
                         <Card.Footer className="bg-transparent border-0">
-                            <Button variant="outline-primary">View</Button>
+                            <Button variant="outline-primary" as={Link} to="/contact">View</Button>
                         </Card.Footer>
                     </Card>
                     <Card className="bg-transparent border-0 py-1">
@@ -59,7 +60,7 @@ function Home() {
                             </Card.Text>
                         </Card.Body>
                         <Card.Footer className="bg-transparent border-0">
-                            <Button variant="outline-primary">View</Button>
+                            <Button variant="outline-primary" as={Link} to="/faq">View</Button>
                         </Card.Footer>
                     </Card>
                 </CardGroup>

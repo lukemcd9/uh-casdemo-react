@@ -1,8 +1,8 @@
 import {Card, Container, Table, Form, Row, Col} from "react-bootstrap";
 import React, {useEffect, useState} from "react";
-import holidaysData from "../../assets/holidays.json";
 import {FaArrowDownLong, FaArrowUpLong} from "react-icons/fa6";
 import Loading from "../../components/Loading.jsx";
+import axios from "axios";
 
 function yearRange(start, stop, step) {
     return Array.from({length: (stop - start) / step + 1}, (_, i) => start + (i * step));
@@ -25,39 +25,28 @@ function Holidays() {
         fetchHolidays(selectedYear);
     }, [selectedYear]);
 
-    useEffect(() => {
-        if (holidays?.length > 0) {
-            const holidaysCopy = [...holidays];
+    const sortHolidays = (holidays, ascending) => {
+        const holidaysCopy = [...holidays];
 
-            const sortedHolidays = holidaysCopy.sort((a, b) => {
-                if (sortHeader.column === "description") {
-                    return a.description.localeCompare(b.description);
-                }
-                return new Date(a[sortHeader.column]) - new Date(b[sortHeader.column]);
-            });
+        const sortedHolidays = holidaysCopy.sort((a, b) => {
+            if (sortHeader.column === "description") {
+                return a.description.localeCompare(b.description);
+            }
+            return new Date(a[sortHeader.column]) - new Date(b[sortHeader.column]);
+        });
 
-            setHolidays(sortHeader.ascending ? sortedHolidays : sortedHolidays.reverse());
-        }
-    }, [sortHeader]);
+        return ascending ? sortedHolidays : sortedHolidays.reverse();
+    };
 
     async function fetchHolidays(year) {
-        let response = holidaysData;
-        // if (year === allYears) {
-        //     response = await axios.get(`https://www.hawaii.edu/its/ws/holiday/api/holidays`);
-        // } else {
-        //     response = await axios.get(`https://www.hawaii.edu/its/ws/holiday/api/holidays/year/${year}`);
-        // }
-        // setHolidays(response.data);
-        let filteredHolidays;
-        if (year !== allYears) {
-            filteredHolidays = response.data.filter(holiday => holiday.officialYear === Number(year));
+        let response;
+        if (year === allYears) {
+            response = await axios.get(`https://www.hawaii.edu/its/cloud/holiday/holidayapi/api/holidays`);
         } else {
-            filteredHolidays = response.data;
+            response = await axios.get(`https://www.hawaii.edu/its/cloud/holiday/holidayapi/api/holidays/year/${year}`);
         }
-        const temp = filteredHolidays.map(h => Math.abs(new Date() - new Date(h.observedDate).getTime()));
-        const idx = temp.indexOf(Math.min(...temp));
-        filteredHolidays[idx].closest = true;
-        setHolidays(filteredHolidays);
+        const { data } = response.data;
+        setHolidays(data);
     }
 
     return (
@@ -106,7 +95,7 @@ function Holidays() {
                             </thead>
                             <tbody>
                             {
-                                holidays.filter((holiday) =>
+                                sortHolidays(holidays, sortHeader.ascending).filter((holiday) =>
                                     Object.values(holiday)
                                         .some((value) => value.toString().toLowerCase().includes(filter.toLowerCase())))
                                     .map((holiday, index) => (

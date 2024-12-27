@@ -197,7 +197,10 @@
 				<groupId>com.github.eirslett</groupId>
 				<artifactId>frontend-maven-plugin</artifactId>
 				<version>${frontend-plugin.version}</version>
-
+				<configuration>
+					<nodeVersion>${node.version}</nodeVersion>
+					<workingDirectory>${frontend.dir}</workingDirectory>
+				</configuration>
 				<executions>
 					<!-- installing node and npm -->
 					<execution>
@@ -236,10 +239,6 @@
 						</configuration>
 					</execution>
 				</executions>
-				<configuration>
-					<nodeVersion>${node.version}</nodeVersion>
-					<workingDirectory>${frontend.dir}</workingDirectory>
-				</configuration>
 			</plugin>
 		</plugins>
 	</build>
